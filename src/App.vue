@@ -1,8 +1,18 @@
 <template>
   <div class="app-container">
-    <the-header />
-    <router-view />
-    <the-footer />
+    <div class="header-wrapper">
+      <the-header />
+    </div>
+    <div class="main-content">
+      <div class="container content-container">
+        <transition name="page" mode="out-in">
+          <router-view />
+        </transition>
+      </div>
+    </div>
+    <div class="footer-wrapper">
+      <the-footer />
+    </div>
   </div>
 </template>
 
@@ -49,12 +59,34 @@ body {
   background-color: var(--light-color);
   color: var(--text-color);
   line-height: 1.6;
+  overflow-x: hidden;
+  width: 100%;
 }
 
 .app-container {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  width: 100%;
+}
+
+.header-wrapper, .footer-wrapper {
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+.main-content {
+  flex: 1;
+  width: 100%;
+  position: relative;
+}
+
+.content-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
 }
 
 .container {
@@ -102,5 +134,21 @@ body {
   box-shadow: var(--box-shadow);
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+}
+
+/* Page Transition Animations */
+.page-enter-active,
+.page-leave-active {
+  transition: opacity 0.3s, transform 0.3s;
+}
+
+.page-enter-from {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-leave-to {
+  opacity: 0;
+  transform: translateX(-20px);
 }
 </style>

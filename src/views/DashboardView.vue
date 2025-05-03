@@ -1,47 +1,51 @@
 <template>
   <div class="dashboard-page">
+    <div class="dashboard-bg-shape"></div>
     <div class="container">
-      <div class="dashboard-header">
+      <div class="dashboard-header" data-aos="fade-down">
         <h1 class="page-title">Price Analysis Dashboard</h1>
         <div class="dashboard-actions">
           <button class="btn btn-outline" @click="downloadReport">
-            <i class="fas fa-download"></i> Download Report
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> 
+            Download Report
           </button>
-          <button class="btn" @click="refreshInsights">
-            <i class="fas fa-sync-alt"></i> Refresh Analysis
+          <button class="btn btn-primary" @click="refreshInsights">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> 
+            Refresh Analysis
           </button>
         </div>
       </div>
 
-      <div v-if="loading" class="loading-container">
+      <div v-if="loading" class="loading-container" data-aos="fade-up">
         <div class="loading-spinner"></div>
         <p>Generating insights...</p>
       </div>
 
-      <div v-else-if="noData" class="no-data">
+      <div v-else-if="noData" class="no-data" data-aos="fade-up">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
         <h2>No Data Available</h2>
         <p>Please upload price data first to view insights.</p>
-        <router-link to="/upload" class="btn">Upload Data</router-link>
+        <router-link to="/upload" class="btn btn-primary">Upload Data</router-link>
       </div>
 
       <div v-else class="dashboard-content">
         <!-- Overview Section -->
-        <div class="card dashboard-overview">
+        <div class="card dashboard-overview" data-aos="fade-up" data-aos-delay="100">
           <h2>Price Analysis Overview</h2>
           <div class="overview-stats">
-            <div class="stat-item">
+            <div class="stat-item" data-aos="zoom-in" data-aos-delay="150">
               <div class="stat-value">{{ productCount }}</div>
               <div class="stat-label">Products</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-aos="zoom-in" data-aos-delay="200">
               <div class="stat-value">{{ retailerCount }}</div>
               <div class="stat-label">Retailers</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-aos="zoom-in" data-aos-delay="250">
               <div class="stat-value">{{ avgPriceDiff.toFixed(1) }}%</div>
               <div class="stat-label">Avg Price Difference</div>
             </div>
-            <div class="stat-item">
+            <div class="stat-item" data-aos="zoom-in" data-aos-delay="300">
               <div class="stat-value">{{ lowestPriceRetailer }}</div>
               <div class="stat-label">Most Competitive</div>
             </div>
@@ -49,7 +53,7 @@
         </div>
 
         <!-- Price Comparison Chart -->
-        <div class="card">
+        <div class="card" data-aos="fade-up" data-aos-delay="150">
           <h2>Price Comparison Across Retailers</h2>
           <div class="chart-container">
             <canvas ref="retailerChart"></canvas>
@@ -58,7 +62,7 @@
         </div>
 
         <!-- Product Price Distribution -->
-        <div class="card">
+        <div class="card" data-aos="fade-up" data-aos-delay="200">
           <h2>Product Price Distribution</h2>
           <div class="chart-container">
             <canvas ref="productChart"></canvas>
@@ -67,7 +71,7 @@
         </div>
 
         <!-- Market Trends -->
-        <div class="card">
+        <div class="card" data-aos="fade-up" data-aos-delay="250">
           <h2>Market Trends & Predictions</h2>
           <div class="chart-container">
             <canvas ref="trendChart"></canvas>
@@ -76,11 +80,14 @@
         </div>
 
         <!-- Strategic Recommendations -->
-        <div class="card">
+        <div class="card" data-aos="fade-up" data-aos-delay="300">
           <h2>Strategic Recommendations</h2>
           <div class="recommendations">
-            <div class="recommendation-item" v-for="(rec, index) in recommendations" :key="index">
-              <div class="recommendation-icon">💡</div>
+            <div class="recommendation-item" v-for="(rec, index) in recommendations" :key="index" 
+                data-aos="fade-right" :data-aos-delay="350 + (index * 50)">
+              <div class="recommendation-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"></path></svg>
+              </div>
               <div class="recommendation-content">
                 <h3>{{ rec.title }}</h3>
                 <p>{{ rec.description }}</p>
@@ -305,14 +312,58 @@ export default {
 
 <style scoped>
 .dashboard-page {
-  padding: 2rem 0;
+  padding: 3rem 0;
+  position: relative;
+  background-color: #f9fafc;
+  min-height: calc(100vh - 160px); /* Account for header and footer */
+  overflow-x: hidden;
+}
+
+.dashboard-bg-shape {
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(79, 172, 254, 0.1) 0%, rgba(0, 242, 254, 0.1) 100%);
+  z-index: 0;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 .dashboard-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.page-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin: 0;
+  background: linear-gradient(to right, #2c3e50, #4ca1af);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+}
+
+.page-title:after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(135deg, #4ca1af, #2c3e50);
+  margin-top: 0.5rem;
+  border-radius: 2px;
 }
 
 .dashboard-actions {
@@ -320,8 +371,84 @@ export default {
   gap: 1rem;
 }
 
-.dashboard-overview {
+.btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 30px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
+}
+
+.btn svg {
+  transition: transform 0.3s ease;
+}
+
+.btn:hover svg {
+  transform: translateY(-1px);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #4ca1af, #2c3e50);
+  color: white;
+  box-shadow: 0 4px 15px rgba(76, 161, 175, 0.3);
+}
+
+.btn-primary:hover {
+  box-shadow: 0 6px 20px rgba(76, 161, 175, 0.4);
+  transform: translateY(-1px);
+}
+
+.btn-outline {
+  border: 2px solid #4ca1af;
+  color: #4ca1af;
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background-color: rgba(76, 161, 175, 0.1);
+}
+
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
   margin-bottom: 2rem;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.card h2 {
+  font-size: 1.8rem;
+  color: #2c3e50;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  position: relative;
+}
+
+.card h2:after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #4ca1af, #2c3e50);
+  margin-top: 0.5rem;
+  border-radius: 2px;
+}
+
+.dashboard-overview {
+  margin-bottom: 2.5rem;
 }
 
 .overview-stats {
@@ -333,37 +460,80 @@ export default {
 
 .stat-item {
   text-align: center;
-  padding: 1rem;
+  padding: 1.5rem;
   background-color: #f9fafc;
-  border-radius: var(--border-radius);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.stat-item:before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(135deg, rgba(76, 161, 175, 0.05), rgba(44, 62, 80, 0.05));
+  transition: height 0.5s ease;
+  z-index: 0;
+}
+
+.stat-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.stat-item:hover:before {
+  height: 100%;
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: var(--primary-color);
+  background: linear-gradient(to right, #2c3e50, #4ca1af);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
   margin-bottom: 0.5rem;
+  position: relative;
+  z-index: 1;
 }
 
 .stat-label {
-  color: var(--text-light);
-  font-size: 0.9rem;
+  color: #666;
+  font-size: 1rem;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
 }
 
 .chart-container {
-  height: 300px;
-  margin: 1.5rem 0;
+  height: 350px;
+  margin: 2rem 0;
+  position: relative;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: #fcfdff;
+  border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .insight-text {
   margin-top: 1.5rem;
-  color: var(--text-color);
-  line-height: 1.6;
+  color: #555;
+  line-height: 1.8;
+  padding: 0.5rem 1rem;
+  border-left: 4px solid #4ca1af;
+  background-color: rgba(76, 161, 175, 0.05);
+  border-radius: 0 8px 8px 0;
 }
 
 .insight-text strong {
-  color: var(--dark-color);
+  color: #2c3e50;
+  font-weight: 600;
 }
 
 .recommendations {
@@ -372,9 +542,10 @@ export default {
 
 .recommendation-item {
   display: flex;
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.8rem;
   border-bottom: 1px solid #eee;
+  transition: all 0.3s ease;
 }
 
 .recommendation-item:last-child {
@@ -383,14 +554,33 @@ export default {
   padding-bottom: 0;
 }
 
+.recommendation-item:hover {
+  transform: translateX(5px);
+}
+
 .recommendation-icon {
-  font-size: 1.8rem;
   margin-right: 1.5rem;
+  min-width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #4ca1af, #2c3e50);
+  color: white;
+  border-radius: 50%;
+  padding: 0.5rem;
 }
 
 .recommendation-content h3 {
-  margin-bottom: 0.5rem;
-  color: var(--dark-color);
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.recommendation-content p {
+  color: #555;
+  line-height: 1.6;
 }
 
 .loading-container {
@@ -398,17 +588,17 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 0;
+  padding: 6rem 0;
 }
 
 .loading-spinner {
-  width: 50px;
-  height: 50px;
-  border: 4px solid rgba(67, 97, 238, 0.2);
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(76, 161, 175, 0.1);
   border-radius: 50%;
-  border-top-color: var(--primary-color);
+  border-top-color: #4ca1af;
   animation: spin 1s linear infinite;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 @keyframes spin {
@@ -417,17 +607,104 @@ export default {
   }
 }
 
+.loading-container p {
+  font-size: 1.2rem;
+  color: #555;
+}
+
 .no-data {
   text-align: center;
-  padding: 4rem 0;
+  padding: 6rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.no-data svg {
+  color: #4ca1af;
+  margin-bottom: 1.5rem;
 }
 
 .no-data h2 {
+  font-size: 2rem;
   margin-bottom: 1rem;
+  color: #2c3e50;
 }
 
 .no-data p {
   margin-bottom: 2rem;
-  color: var(--text-light);
+  color: #666;
+  font-size: 1.1rem;
+  max-width: 500px;
+}
+
+@media (max-width: 992px) {
+  .dashboard-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+  }
+  
+  .page-title:after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .card h2 {
+    text-align: center;
+  }
+  
+  .card h2:after {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .stat-value {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-page {
+    padding: 2rem 0;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .card {
+    padding: 1.5rem;
+  }
+  
+  .chart-container {
+    height: 300px;
+  }
+  
+  .stat-item {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .dashboard-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 0.75rem;
+  }
+  
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .recommendation-item {
+    flex-direction: column;
+  }
+  
+  .recommendation-icon {
+    margin-bottom: 1rem;
+    margin-right: 0;
+  }
 }
 </style>
