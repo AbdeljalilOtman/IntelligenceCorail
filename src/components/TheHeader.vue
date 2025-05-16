@@ -11,6 +11,7 @@
           <li><router-link to="/">Home</router-link></li>
           <li><router-link to="/upload">Upload Data</router-link></li>
           <li><router-link to="/dashboard">Dashboard</router-link></li>
+          <li><router-link to="/chat">Chat Analysis</router-link></li>
           <li><router-link to="/settings">Settings</router-link></li>
         </ul>
       </nav>

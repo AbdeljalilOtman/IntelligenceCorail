@@ -21,6 +21,9 @@
           <button class="nav-button" @click="navigateTo('dashboard')">
             <i class="fas fa-chart-bar"></i> Dashboard
           </button>
+          <button class="nav-button" @click="navigateTo('chat')">
+            <i class="fas fa-comments"></i> Chat
+          </button>
           <button class="nav-button" @click="navigateTo('settings')">
             <i class="fas fa-cog"></i> Settings
           </button>

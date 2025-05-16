@@ -1,0 +1,137 @@
+[
+  {
+    "category": "DAIRY",
+    "product": "Full Fat Milk 1L",
+    "barcode": "5000123456789",
+    "retailer": "AUCHAN",
+    "priceCount": 42,
+    "averagePrice": 1.15,
+    "priceDifference": "2.5%"
+  },
+  {
+    "category": "DAIRY",
+    "product": "Full Fat Milk 1L",
+    "barcode": "5000123456789",
+    "retailer": "CARREFOUR",
+    "priceCount": 38,
+    "averagePrice": 1.18,
+    "priceDifference": "5.2%"
+  },
+  {
+    "category": "DAIRY",
+    "product": "Full Fat Milk 1L",
+    "barcode": "5000123456789",
+    "retailer": "LECLERC",
+    "priceCount": 45,
+    "averagePrice": 1.12,
+    "priceDifference": "0.0%"
+  },
+  {
+    "category": "DAIRY",
+    "product": "Greek Yogurt 500g",
+    "barcode": "5000123456790",
+    "retailer": "AUCHAN",
+    "priceCount": 28,
+    "averagePrice": 2.45,
+    "priceDifference": "3.8%"
+  },
+  {
+    "category": "DAIRY",
+    "product": "Greek Yogurt 500g",
+    "barcode": "5000123456790",
+    "retailer": "CARREFOUR",
+    "priceCount": 32,
+    "averagePrice": 2.59,
+    "priceDifference": "9.7%"
+  },
+  {
+    "category": "DAIRY",
+    "product": "Greek Yogurt 500g",
+    "barcode": "5000123456790",
+    "retailer": "LECLERC",
+    "priceCount": 31,
+    "averagePrice": 2.36,
+    "priceDifference": "0.0%"
+  },
+  {
+    "category": "BAKERY",
+    "product": "White Sliced Bread 800g",
+    "barcode": "5000123456791",
+    "retailer": "AUCHAN",
+    "priceCount": 55,
+    "averagePrice": 1.05,
+    "priceDifference": "5.0%"
+  },
+  {
+    "category": "BAKERY",
+    "product": "White Sliced Bread 800g",
+    "barcode": "5000123456791",
+    "retailer": "CARREFOUR",
+    "priceCount": 58,
+    "averagePrice": 1.10,
+    "priceDifference": "10.0%"
+  },
+  {
+    "category": "BAKERY",
+    "product": "White Sliced Bread 800g",
+    "barcode": "5000123456791",
+    "retailer": "LECLERC",
+    "priceCount": 61,
+    "averagePrice": 1.00,
+    "priceDifference": "0.0%"
+  },
+  {
+    "category": "BEVERAGES",
+    "product": "Orange Juice 1L",
+    "barcode": "5000123456792",
+    "retailer": "AUCHAN",
+    "priceCount": 40,
+    "averagePrice": 2.25,
+    "priceDifference": "4.7%"
+  },
+  {
+    "category": "BEVERAGES",
+    "product": "Orange Juice 1L",
+    "barcode": "5000123456792",
+    "retailer": "CARREFOUR",
+    "priceCount": 38,
+    "averagePrice": 2.35,
+    "priceDifference": "9.3%"
+  },
+  {
+    "category": "BEVERAGES",
+    "product": "Orange Juice 1L",
+    "barcode": "5000123456792",
+    "retailer": "LECLERC",
+    "priceCount": 42,
+    "averagePrice": 2.15,
+    "priceDifference": "0.0%"
+  },
+  {
+    "category": "SNACKS",
+    "product": "Potato Chips 150g",
+    "barcode": "5000123456793",
+    "retailer": "AUCHAN",
+    "priceCount": 68,
+    "averagePrice": 1.95,
+    "priceDifference": "2.6%"
+  },
+  {
+    "category": "SNACKS",
+    "product": "Potato Chips 150g",
+    "barcode": "5000123456793",
+    "retailer": "CARREFOUR",
+    "priceCount": 65,
+    "averagePrice": 2.10,
+    "priceDifference": "10.5%"
+  },
+  {
+    "category": "SNACKS",
+    "product": "Potato Chips 150g",
+    "barcode": "5000123456793",
+    "retailer": "LECLERC",
+    "priceCount": 70,
+    "averagePrice": 1.90,
+    "priceDifference": "0.0%"
+  }
+]

@@ -5,11 +5,15 @@
       <div class="dashboard-header" data-aos="fade-down">
         <h1 class="page-title">Price Analysis Dashboard</h1>
         <div class="dashboard-actions">
+          <router-link to="/chat" class="btn btn-primary chat-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Ask Custom Questions
+          </router-link>
           <button class="btn btn-outline" @click="downloadReport">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg> 
             Download Report
           </button>
-          <button class="btn btn-primary" @click="refreshInsights">
+          <button class="btn btn-outline" @click="refreshInsights">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 4v6h-6"></path><path d="M1 20v-6h6"></path><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> 
             Refresh Analysis
           </button>
@@ -369,6 +373,15 @@ export default {
 .dashboard-actions {
   display: flex;
   gap: 1rem;
+}
+
+.chat-btn {
+  background: linear-gradient(135deg, #FF6B6B, #FF8E53);
+  margin-right: auto; /* Pushes other buttons to the right */
+}
+
+.chat-btn:hover {
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
 }
 
 .btn {

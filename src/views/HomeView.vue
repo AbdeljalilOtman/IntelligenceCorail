@@ -96,12 +96,30 @@
         </div>
       </div>
     </section>
+
+    <section class="sample-data-section" v-if="showTestingTools">
+      <div class="container">
+        <h2 class="section-title" data-aos="fade-up">For Testing & Development</h2>
+        <p class="section-description">Quickly load sample data to test the application features without uploading files.</p>
+        <sample-data-loader />
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
+import SampleDataLoader from '@/components/SampleDataLoader.vue';
+
 export default {
   name: 'HomeView',
+  components: {
+    SampleDataLoader
+  },
+  data() {
+    return {
+      showTestingTools: process.env.NODE_ENV === 'development'
+    }
+  },
   mounted() {
     // If you want to use AOS library for animations
     // Make sure to install it: npm install aos
@@ -376,6 +394,19 @@ export default {
   font-size: 0.9rem;
   margin: 0;
   color: #666;
+}
+
+.sample-data-section {
+  padding: 4rem 0;
+  background-color: #f9fafc;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.section-description {
+  text-align: center;
+  color: #666;
+  max-width: 600px;
+  margin: 0 auto 2rem;
 }
 
 @media (max-width: 992px) {

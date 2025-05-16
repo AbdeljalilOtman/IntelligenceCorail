@@ -25,10 +25,21 @@
         <div class="card">
           <!-- Step 1: Upload File -->
           <div v-if="step === 1" class="upload-step" data-aos="fade-up">
-            <h2>Upload Your Price Data PDF</h2>
-            <p>Please upload a PDF file containing price data in the required format.</p>
+            <h2>Upload Your Price Data</h2>
+            <p>Please upload your price data as PDF or JSON file.</p>
+
+            <div class="upload-options">
+              <button :class="['option-btn', { active: uploadType === 'pdf' }]" @click="uploadType = 'pdf'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                PDF Upload
+              </button>
+              <button :class="['option-btn', { active: uploadType === 'json' }]" @click="uploadType = 'json'">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+                JSON Upload
+              </button>
+            </div>
             
-            <div 
+            <div v-if="uploadType === 'pdf'" 
               class="dropzone" 
               :class="{ 'dropzone-active': isDragging }"
               @dragover.prevent="isDragging = true"
@@ -52,8 +63,38 @@
               </div>
             </div>
 
+            <div v-if="uploadType === 'json'" class="json-uploader">
+              <input 
+                type="file" 
+                ref="jsonFileInput" 
+                @change="handleJsonSelect" 
+                accept="application/json" 
+                style="display: none"
+              >
+              <div class="dropzone" 
+                :class="{ 'dropzone-active': isDraggingJson }"
+                @dragover.prevent="isDraggingJson = true"
+                @dragleave.prevent="isDraggingJson = false"
+                @drop.prevent="handleJsonDrop"
+              >
+                <div class="dropzone-content">
+                  <div class="upload-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                  </div>
+                  <p>Drag and drop your JSON file here</p>
+                  <p>or</p>
+                  <button class="btn btn-primary" @click="$refs.jsonFileInput.click()">Browse Files</button>
+                </div>
+              </div>
+            </div>
+
             <div v-if="errorMessage" class="error-message">
               {{ errorMessage }}
+            </div>
+
+            <div v-if="uploadType === 'json'" class="sample-data-option">
+              <p>Don't have a JSON file? Use our sample data:</p>
+              <button class="btn btn-outline" @click="loadSampleData">Load Sample Data</button>
             </div>
 
             <div class="format-info">
@@ -114,14 +155,39 @@
 
             <div class="form-group">
               <label for="apiKey">ChatGPT API Key</label>
-              <input 
-                type="password" 
-                id="apiKey" 
-                v-model="apiKey" 
-                placeholder="sk-..."
-                class="form-control"
-              >
-              <small>Your API key is never stored on our servers and is only used for this session.</small>
+              <div class="api-key-input">
+                <input 
+                  type="password" 
+                  id="apiKey" 
+                  v-model="apiKey" 
+                  placeholder="sk-..."
+                  class="form-control"
+                  :class="{'invalid-key': !isValidApiKey && apiKey.length > 0}"
+                >
+                <button class="btn-icon" @click="toggleApiKeyVisibility" type="button">
+                  <svg v-if="showApiKey" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                  <svg v-else xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+              </div>
+              <small v-if="!isValidApiKey && apiKey.length > 0" class="error-text">
+                Invalid API key format. OpenAI keys typically start with "sk-" followed by characters.
+              </small>
+              <small v-else>
+                Your API key is never stored on our servers and is only used for this session.
+                <a href="https://platform.openai.com/account/api-keys" target="_blank" class="get-key-link">Get an API key</a>
+              </small>
+            </div>
+
+            <div class="api-key-options">
+              <label class="option-label">
+                <input type="checkbox" v-model="saveApiKey">
+                Remember my API key for future sessions
+              </label>
+              
+              <label class="option-label">
+                <input type="checkbox" v-model="useServerKey">
+                Use server API key instead (limited usage)
+              </label>
             </div>
 
             <div class="insight-options">
@@ -148,7 +214,7 @@
 
             <div class="actions">
               <button class="btn btn-outline" @click="step = 2">Back</button>
-              <button class="btn btn-primary" @click="generateInsights" :disabled="!apiKey">
+              <button class="btn btn-primary" @click="generateInsights" :disabled="!canGenerateInsights">
                 <span v-if="isLoading">Processing...</span>
                 <span v-else>Generate Insights</span>
               </button>
@@ -162,6 +228,7 @@
 
 <script>
 import axios from 'axios';
+import sampleData from '../../sample-data.json';
 
 export default {
   name: 'UploadView',
@@ -179,7 +246,29 @@ export default {
         predictions: false,
         recommendations: true
       },
-      isLoading: false
+      isLoading: false,
+      uploadType: 'pdf',
+      isDraggingJson: false,
+      useServerKey: false,
+      showApiKey: false,
+      saveApiKey: false,
+    }
+  },
+  computed: {
+    isValidApiKey() {
+      // Basic validation to check if the API key format is correct
+      return this.apiKey.startsWith('sk-') && this.apiKey.length > 10;
+    },
+    canGenerateInsights() {
+      return this.isValidApiKey || this.useServerKey;
+    }
+  },
+  mounted() {
+    // Load API key from localStorage if available
+    const savedApiKey = localStorage.getItem('apiKey');
+    if (savedApiKey) {
+      this.apiKey = savedApiKey;
+      this.saveApiKey = true;
     }
   },
   methods: {
@@ -222,6 +311,9 @@ export default {
         if (response.data.success) {
           this.extractedData = response.data.data;
           this.step = 2;
+          
+          // Store raw data for chat functionality
+          sessionStorage.setItem('rawData', JSON.stringify(this.extractedData));
         } else {
           this.errorMessage = response.data.message || 'Failed to process file.';
         }
@@ -232,9 +324,64 @@ export default {
         this.isLoading = false;
       }
     },
-    async generateInsights() {
-      if (!this.apiKey) {
+    handleJsonSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        this.handleJsonFile(file);
+      }
+    },
+    handleJsonDrop(event) {
+      this.isDraggingJson = false;
+      const file = event.dataTransfer.files[0];
+      if (file && file.type === 'application/json') {
+        this.handleJsonFile(file);
+      } else {
+        this.errorMessage = 'Please upload a JSON file.';
+      }
+    },
+    handleJsonFile(file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        try {
+          const data = JSON.parse(e.target.result);
+          this.processJsonData(data);
+        } catch (error) {
+          this.errorMessage = 'Invalid JSON file. Please check the format.';
+          console.error('JSON parse error:', error);
+        }
+      };
+      reader.onerror = () => {
+        this.errorMessage = 'Error reading the file.';
+      };
+      reader.readAsText(file);
+    },
+    loadSampleData() {
+      this.processJsonData(sampleData);
+    },
+    processJsonData(data) {
+      if (!Array.isArray(data) || data.length === 0) {
+        this.errorMessage = 'Invalid data format. The JSON file must contain an array of price data objects.';
         return;
+      }
+      
+      this.extractedData = data;
+      this.errorMessage = '';
+      this.step = 2;
+    },
+    toggleApiKeyVisibility() {
+      this.showApiKey = !this.showApiKey;
+    },
+    async generateInsights() {
+      if (!this.canGenerateInsights) {
+        return;
+      }
+
+      // Save API key if requested
+      if (this.saveApiKey && this.isValidApiKey) {
+        localStorage.setItem('apiKey', this.apiKey);
+      } else if (!this.saveApiKey && localStorage.getItem('apiKey')) {
+        // Remove saved API key if user unchecked the box
+        localStorage.removeItem('apiKey');
       }
 
       this.isLoading = true;
@@ -242,19 +389,28 @@ export default {
       try {
         const response = await axios.post('/api/insights', {
           data: this.extractedData,
-          apiKey: this.apiKey,
+          apiKey: this.useServerKey ? null : this.apiKey, // Send null to use server key
+          useServerKey: this.useServerKey,
           options: this.analysisOptions
         });
 
         if (response.data.success) {
+          // Store raw data for chat functionality
+          const insights = response.data.insights;
+          insights.rawData = this.extractedData;
+          
           // Store the insights in sessionStorage
-          sessionStorage.setItem('insights', JSON.stringify(response.data.insights));
+          sessionStorage.setItem('insights', JSON.stringify(insights));
           this.$router.push('/dashboard');
         } else {
           this.errorMessage = response.data.message || 'Failed to generate insights.';
         }
       } catch (error) {
-        this.errorMessage = 'Error generating insights. Please check your API key and try again.';
+        if (error.response && error.response.data && error.response.data.message) {
+          this.errorMessage = error.response.data.message;
+        } else {
+          this.errorMessage = 'Error generating insights. Please check your API key and try again.';
+        }
         console.error('API error:', error);
       } finally {
         this.isLoading = false;
@@ -639,6 +795,114 @@ export default {
   accent-color: #4ca1af;
   width: 18px;
   height: 18px;
+}
+
+.upload-options {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9fafc;
+  border: 1px solid #eaeef3;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 140px;
+}
+
+.option-btn svg {
+  margin-bottom: 0.5rem;
+  color: #4ca1af;
+}
+
+.option-btn.active {
+  background: linear-gradient(135deg, rgba(76, 161, 175, 0.1), rgba(44, 62, 80, 0.1));
+  border-color: #4ca1af;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(76, 161, 175, 0.15);
+}
+
+.sample-data-option {
+  margin-top: 1.5rem;
+  text-align: center;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+}
+
+.json-uploader {
+  margin: 2rem 0;
+}
+
+.api-key-input {
+  display: flex;
+  align-items: center;
+}
+
+.api-key-input .form-control {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  flex: 1;
+}
+
+.api-key-input .btn-icon {
+  height: 50px;
+  width: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9fafc;
+  border: 1px solid #ddd;
+  border-left: none;
+  border-top-right-radius: 8px;
+  border-bottom-right-radius: 8px;
+  cursor: pointer;
+  color: #666;
+  transition: all 0.2s ease;
+}
+
+.api-key-input .btn-icon:hover {
+  background-color: #f0f0f0;
+}
+
+.invalid-key {
+  border-color: #f44336 !important;
+}
+
+.error-text {
+  color: #f44336;
+}
+
+.api-key-options {
+  margin: 1.5rem 0;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  cursor: pointer;
+}
+
+.option-label input {
+  margin-right: 0.75rem;
+}
+
+.get-key-link {
+  color: #4ca1af;
+  text-decoration: underline;
+  margin-left: 0.25rem;
+}
+
+.get-key-link:hover {
+  color: #2c3e50;
 }
 
 /* Make sure tables and content are responsive */
